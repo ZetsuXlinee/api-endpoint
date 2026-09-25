@@ -2,10 +2,10 @@
   "name": "simplified-api",
   "version": "1.0.0",
   "description": "Minimalist plugin-based REST API framework. Add files to create endpoints instantly. Pure JSON responses, no UI components.",
-  "main": "index.js",
+  "main": "server.js",
   "type": "commonjs",
   "scripts": {
-    "start": "node index.js"
+    "start": "node server.js"
   },
   "keywords": [
     "api",
