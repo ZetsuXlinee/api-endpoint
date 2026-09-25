@@ -76,7 +76,6 @@ app.use((err, req, res, next) => {
     )
 });
 
-// Jalanin listen cuma kalo di VPS / localhost, JANGAN di Vercel
 if (!process.env.VERCEL) {
     app.listen(PORT, () => {
         console.log('');
