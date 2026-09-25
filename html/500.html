@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="id" data-theme="dark">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>404 — Not Found</title>
+
+<!-- ══ FAVICON -->
+<link rel="icon" type="image/jpeg" href="/assets/icon.jpg"/>
+<link rel="apple-touch-icon" href="/assets/icon.jpg"/>
+
+<!-- ══ OG META -->
+<meta name="description" content="404 — Halaman tidak ditemukan"/>
+<meta property="og:type" content="website"/>
+<meta property="og:title" content="404 — Not Found" id="og-title"/>
+<meta property="og:description" content="Halaman yang kamu cari tidak ditemukan." id="og-desc"/>
+<meta property="og:image" content="/assets/banner.jpg" id="og-image"/>
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:title" content="404 — Not Found"/>
+<meta name="twitter:description" content="Halaman yang kamu cari tidak ditemukan."/>
+<meta name="twitter:image" content="/assets/banner.jpg"/>
+
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<style>
+/* ══ VARIABLES */
+:root {
+  --bg:#071510;--bg2:#0a1c16;--card:#0d2118;--card2:#102a1e;
+  --fg:#c8ddd5;--fg2:#7aaa90;--fg3:#3d6650;
+  --primary:#2dbd7e;--primary2:#1a9962;--accent:#2dbd7e;--red:#f87171;
+  --border:rgba(45,189,126,0.08);--border2:rgba(45,189,126,0.16);
+  --glow:0 0 40px rgba(45,189,126,0.18);--shadow:0 8px 32px rgba(0,0,0,0.5);
+  --r:10px;
+  --ff-mono:'Space Mono',monospace;--ff-disp:'Bebas Neue',sans-serif;--ff-body:'DM Sans',sans-serif;
+}
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+::-webkit-scrollbar{width:4px;}
+::-webkit-scrollbar-track{background:var(--bg);}
+::-webkit-scrollbar-thumb{background:var(--border2);border-radius:99px;}
+html{scroll-behavior:smooth;}
+body{background:var(--bg);color:var(--fg);font-family:var(--ff-body);-webkit-font-smoothing:antialiased;overflow-x:hidden;line-height:1.6;min-height:100vh;display:flex;flex-direction:column;}
+
+/* ══ GRID BG */
+.grid-bg{position:fixed;inset:0;z-index:0;pointer-events:none;
+  background-image:linear-gradient(rgba(45,189,126,0.03) 1px,transparent 1px),linear-gradient(90deg,rgba(45,189,126,0.03) 1px,transparent 1px);
+  background-size:48px 48px;}
+
+.orb{position:fixed;border-radius:50%;filter:blur(80px);pointer-events:none;z-index:0;}
+.orb-1{width:500px;height:500px;background:rgba(45,189,126,0.07);top:-100px;right:-100px;}
+.orb-2{width:400px;height:400px;background:rgba(45,189,126,0.04);bottom:20%;left:-80px;}
+
+/* ══ ANIMATIONS */
+@keyframes spin{to{transform:rotate(360deg);}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:none;}}
+@keyframes pulseDot{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.5);opacity:.6}}
+@keyframes glitch{
+  0%,100%{clip-path:inset(0 0 100% 0);transform:translate(0);}
+  10%{clip-path:inset(10% 0 60% 0);transform:translate(-4px,2px);}
+  20%{clip-path:inset(50% 0 30% 0);transform:translate(4px,-2px);}
+  30%{clip-path:inset(20% 0 70% 0);transform:translate(-2px,1px);}
+  40%{clip-path:inset(80% 0 5% 0);transform:translate(3px,-1px);}
+  50%{clip-path:inset(40% 0 40% 0);transform:translate(-3px,2px);}
+  60%{clip-path:inset(5% 0 80% 0);transform:translate(2px,-3px);}
+  70%{clip-path:inset(70% 0 15% 0);transform:translate(-4px,1px);}
+  80%{clip-path:inset(30% 0 55% 0);transform:translate(4px,2px);}
+  90%{clip-path:inset(60% 0 25% 0);transform:translate(-2px,-1px);}
+}
+.a1{animation:fadeUp .55s .05s ease both;}
+.a2{animation:fadeUp .55s .15s ease both;}
+.a3{animation:fadeUp .55s .25s ease both;}
+
+/* ══ HEADER */
+header{position:sticky;top:0;z-index:200;background:rgba(7,21,16,0.88);backdrop-filter:blur(18px) saturate(180%);border-bottom:1px solid var(--border2);}
+.header-inner{max-width:1200px;margin:0 auto;padding:0 20px;height:56px;display:flex;align-items:center;justify-content:space-between;}
+.logo{font-family:var(--ff-mono);font-size:13px;font-weight:700;color:var(--fg);text-decoration:none;display:flex;align-items:center;gap:10px;}
+.logo-dot{width:8px;height:8px;background:var(--primary);border-radius:50%;animation:pulseDot 2s ease infinite;}
+.logo-badge{font-size:9px;font-weight:700;background:var(--primary2);color:#fff;padding:2px 8px;letter-spacing:1px;border-radius:6px;}
+.nav-pill{font-family:var(--ff-mono);font-size:9px;font-weight:700;color:var(--fg3);letter-spacing:1px;padding:4px 11px;border:1px solid var(--border2);border-radius:8px;background:var(--card2);}
+
+/* ══ ERROR PAGE */
+.err-wrap{
+  flex:1;display:flex;align-items:center;justify-content:center;
+  position:relative;z-index:10;padding:40px 20px;
+}
+.err-card{
+  background:var(--card);border:1px solid var(--border2);border-radius:16px;
+  padding:48px 36px;max-width:480px;width:100%;text-align:center;
+  position:relative;overflow:hidden;
+}
+.err-card::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,var(--red),rgba(248,113,113,0.2),transparent);
+}
+.err-code-wrap{position:relative;display:inline-block;margin-bottom:8px;}
+.err-code{
+  font-family:var(--ff-disp);font-size:120px;line-height:1;
+  color:var(--red);letter-spacing:6px;opacity:.15;
+  display:block;user-select:none;
+}
+.err-code-overlay{
+  position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+}
+.err-code-overlay::before,
+.err-code-overlay::after{
+  content:'404';
+  font-family:var(--ff-disp);font-size:120px;line-height:1;
+  letter-spacing:6px;position:absolute;
+}
+.err-code-overlay::before{
+  color:rgba(248,113,113,0.5);
+  animation:glitch 3.5s infinite steps(1);
+}
+.err-code-overlay::after{
+  color:var(--red);
+  animation:glitch 3.5s .12s infinite steps(1);
+}
+.err-badge{
+  display:inline-block;font-family:var(--ff-mono);font-size:9px;font-weight:700;
+  letter-spacing:2px;text-transform:uppercase;
+  background:rgba(248,113,113,0.1);color:var(--red);
+  border:1px solid rgba(248,113,113,0.25);border-radius:6px;
+  padding:3px 12px;margin-bottom:20px;
+}
+.err-title{
+  font-family:var(--ff-disp);font-size:32px;letter-spacing:2px;
+  color:var(--fg);margin-bottom:10px;
+}
+.err-desc{
+  font-family:var(--ff-mono);font-size:11px;color:var(--fg3);
+  line-height:1.8;margin-bottom:28px;
+}
+.err-path{
+  background:var(--bg2);border:1px solid var(--border2);border-radius:8px;
+  padding:10px 14px;margin-bottom:24px;
+  font-family:var(--ff-mono);font-size:10px;color:var(--fg2);
+  word-break:break-all;display:none;
+}
+.err-path .path-label{font-size:9px;color:var(--fg3);letter-spacing:1px;text-transform:uppercase;display:block;margin-bottom:4px;}
+.err-path .path-val{color:var(--red);}
+.btn-home{
+  display:inline-flex;align-items:center;gap:8px;
+  background:var(--primary);color:#fff;
+  font-family:var(--ff-mono);font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;
+  text-decoration:none;border-radius:10px;padding:13px 28px;
+  transition:all .2s;
+}
+.btn-home:hover{background:var(--primary2);box-shadow:var(--glow);}
+.btn-home:active{transform:scale(.97);}
+.err-hint{margin-top:20px;font-family:var(--ff-mono);font-size:9px;color:var(--fg3);letter-spacing:.5px;}
+.err-hint::before{content:'// ';}
+
+/* ══ FOOTER */
+hr.sep{border:none;border-top:1px solid var(--border2);max-width:1200px;margin:0 auto;}
+footer{background:var(--card);border-top:1px solid var(--border2);position:relative;z-index:10;}
+.footer-inner{max-width:1200px;margin:0 auto;padding:20px 20px;display:flex;align-items:center;justify-content:space-between;gap:12px;}
+.footer-brand{font-family:var(--ff-disp);font-size:20px;color:var(--fg);letter-spacing:2px;}
+.footer-copy{font-family:var(--ff-mono);font-size:9px;color:var(--fg3);letter-spacing:.5px;margin-top:2px;}
+.footer-right{text-align:right;font-family:var(--ff-mono);font-size:9px;color:var(--fg3);line-height:1.8;}
+.footer-right em{color:var(--fg2);font-style:normal;}
+</style>
+</head>
+<body>
+
+<div class="grid-bg"></div>
+<div class="orb orb-1"></div>
+<div class="orb orb-2"></div>
+
+<!-- HEADER -->
+<header>
+  <div class="header-inner">
+    <a class="logo" href="/" >
+      <span class="logo-dot"></span>
+      <span id="hdr-title">BASE-SIMPLE</span>
+      <span class="logo-badge">API</span>
+    </a>
+    <div style="display:flex;align-items:center;gap:6px;">
+      <span class="nav-pill">404</span>
+    </div>
+  </div>
+</header>
+
+<!-- ERROR CONTENT -->
+<div class="err-wrap">
+  <div class="err-card a1">
+    <div class="err-code-wrap">
+      <span class="err-code">404</span>
+      <div class="err-code-overlay"></div>
+    </div>
+    <div class="err-badge a2">NOT FOUND</div>
+    <div class="err-title a2">Page Not Found</div>
+    <p class="err-desc a2">
+      Endpoint atau halaman yang kamu cari<br>
+      tidak ditemukan di server ini.
+    </p>
+    <div class="err-path a2" id="err-path">
+      <span class="path-label">Requested Path</span>
+      <span class="path-val" id="path-val"></span>
+    </div>
+    <a href="/" class="btn-home a3">&#8592;&nbsp; Kembali ke Home</a>
+    <div class="err-hint a3">halaman tidak tersedia</div>
+  </div>
+</div>
+
+<hr class="sep"/>
+<footer>
+  <div class="footer-inner">
+    <div>
+      <div class="footer-brand" id="footer-name">BASE-SIMPLE</div>
+      <div class="footer-copy">© <span id="yr"></span> <span id="footer-author">@oota_asik_sendiri</span></div>
+      <div class="footer-copy" style="margin-top:3px;">html by web: <a href="https://api.theresav.biz.id" style="color:var(--primary);text-decoration:none;" target="_blank">https://api.theresav.biz.id</a></div>
+    </div>
+    <div class="footer-right">
+      <em>express.js</em><br>REST API
+    </div>
+  </div>
+</footer>
+
+<script>
+document.getElementById('yr').textContent = new Date().getFullYear();
+
+// Tampilkan path yang diminta
+const p = window.location.pathname;
+if(p && p !== '/404.html'){
+  document.getElementById('err-path').style.display = 'block';
+  document.getElementById('path-val').textContent = p;
+}
+
+// Load setting.json
+fetch('/assets/setting.json')
+  .then(function(r){return r.json();})
+  .then(function(s){
+    var origin=window.location.origin||'';
+    if(s.name){
+      document.getElementById('footer-name').textContent=s.name;
+      document.getElementById('hdr-title').textContent=s.name;
+      document.getElementById('og-title').setAttribute('content',s.name+' — 404 Not Found');
+    }
+    if(s.author) document.getElementById('footer-author').textContent=s.author;
+    if(s.desc) document.getElementById('og-desc').setAttribute('content',s.desc);
+    document.getElementById('og-image').setAttribute('content',origin+'/assets/banner.jpg');
+  })
+  .catch(function(){});
+</script>
+</body>
+</html>
