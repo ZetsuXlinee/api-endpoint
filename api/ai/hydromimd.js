@@ -1,35 +1,32 @@
 const axios = require('axios');
+const BACKEND_CHAT = 'https://hydromind-backend.onrender.com/api/kb/chat';
+const BACKEND_ROOT = 'https://hydromind-backend.onrender.com/';
 
 module.exports = async (req, res) => {
   const text = req.query.text;
   if(!text) return res.status(400).json({error:'text required'});
 
-  try {
-    // 1. coba bangunin dulu cepet
-    await axios.get('https://hydromind-backend.onrender.com/', { timeout: 4000 }).catch(()=>{});
+  for(let attempt=1; attempt<=2; attempt++){
+    try {
+      if(attempt===1) await axios.get(BACKEND_ROOT, {timeout:4000}).catch(()=>{});
 
-    // 2. coba request dengan timeout 9 detik (biar gak ke-abort Vercel)
-    const { data } = await axios.post('https://hydromind-backend.onrender.com/api/kb/chat', {
-      question: text,
-      history: [],
-      answerPolicy: { domain: 'marine_offshore_hydraulics', strictRelevance: true, allowEngineeringFallback: true }
-    }, {
-      headers: { 'Content-Type':'application/json', 'X-Client-Fingerprint': 'fp'+Date.now() },
-      timeout: 9000 // < 10s limit Vercel
-    });
-
-    const answer = data.content?.[0]?.text || data.answer;
-    return res.status(200).json({ status: true, result: answer });
-
-  } catch (e) {
-    // Kalo timeout, suruh user retry
-    if(e.code === 'ECONNABORTED') {
-      return res.status(202).json({
-        status: false,
-        error: 'Backend Render lagi cold start (tidur), butuh 30 detik buat bangun. Silakan refresh lagi 20 detik lagi, request kedua pasti cepet.',
-        fix: 'Pasang cron di cron-job.org yang nge-ping https://hydromind-backend.onrender.com/ tiap 5 menit biar gak tidur lagi'
+      const { data } = await axios.post(BACKEND_CHAT, {
+        question: text, history: [],
+        answerPolicy: { domain:'marine_offshore_hydraulics', strictRelevance:true, allowEngineeringFallback:true }
+      }, {
+        headers:{'Content-Type':'application/json','X-Client-Fingerprint':'fp'+Date.now()},
+        timeout: 15000
       });
+
+      const answer = data.content?.[0]?.text || data.answer;
+      return res.json({ status:true, result: answer, attempt });
+
+    } catch(e){
+      if(attempt===2){
+        return res.status(500).json({status:false, error:e.message});
+      }
+      // tunggu 5 detik biar Render bangun, lalu retry
+      await new Promise(r=>setTimeout(r,5000));
     }
-    return res.status(500).json({ error: e.message, details: e.response?.data });
   }
 }
