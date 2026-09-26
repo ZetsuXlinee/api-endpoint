@@ -1,32 +1,24 @@
 const axios = require('axios');
-const BACKEND_CHAT = 'https://hydromind-backend.onrender.com/api/kb/chat';
-const BACKEND_ROOT = 'https://hydromind-backend.onrender.com/';
+const BACKEND = 'https://hydromind-backend.onrender.com/api/kb/chat';
+const ROOT = 'https://hydromind-backend.onrender.com/';
 
 module.exports = async (req, res) => {
   const text = req.query.text;
-  if(!text) return res.status(400).json({error:'text required'});
+  if(!text) return res.json({error:'text required'});
 
-  for(let attempt=1; attempt<=2; attempt++){
-    try {
-      if(attempt===1) await axios.get(BACKEND_ROOT, {timeout:4000}).catch(()=>{});
+  try {
+    await axios.get(ROOT).catch(()=>{});
 
-      const { data } = await axios.post(BACKEND_CHAT, {
-        question: text, history: [],
-        answerPolicy: { domain:'marine_offshore_hydraulics', strictRelevance:true, allowEngineeringFallback:true }
-      }, {
-        headers:{'Content-Type':'application/json','X-Client-Fingerprint':'fp'+Date.now()},
-        timeout: 15000
-      });
+    const { data } = await axios.post(BACKEND, {
+      question: text, history: [],
+      answerPolicy: { domain:'marine_offshore_hydraulics', strictRelevance:true, allowEngineeringFallback:true }
+    }, {
+      headers:{'Content-Type':'application/json','X-Client-Fingerprint':'fp'+Date.now()},
+      timeout: 50000 // 50 detik, biar cukup buat Render bangun
+    });
 
-      const answer = data.content?.[0]?.text || data.answer;
-      return res.json({ status:true, result: answer, attempt });
-
-    } catch(e){
-      if(attempt===2){
-        return res.status(500).json({status:false, error:e.message});
-      }
-      // tunggu 5 detik biar Render bangun, lalu retry
-      await new Promise(r=>setTimeout(r,5000));
-    }
+    res.json({ status:true, result: data.content?.[0]?.text || data.answer });
+  } catch(e){
+    res.json({ status:false, error: e.message, hint: 'Render cold start 30s, refresh lagi' });
   }
 }
